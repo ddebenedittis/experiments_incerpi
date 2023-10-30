@@ -53,8 +53,13 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt --mount=type=cache,s
     apt-get update && apt-get install --no-install-recommends -qqy \
     bash-completion \
     build-essential \
-    python3-pip \
     git \
+    python3-pip \
+    ros-${ROS_DISTRO}-joint-state-publisher \
+    ros-${ROS_DISTRO}-joint-state-publisher-gui \
+    ros-${ROS_DISTRO}-robot-state-publisher \
+    ros-${ROS_DISTRO}-rviz2 \
+    ros-${ROS_DISTRO}-xacro \
     sudo \
     wget
 
