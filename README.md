@@ -35,3 +35,9 @@ Run the publishing node with
 ```shell
 ros2 run commands_publisher commands_publisher_node
 ```
+
+To visualize the results in RViz do
+```shell
+ros2 launch arm_description move_arm.launch.py
+ros2 run commands_publisher commands_publisher_viz_node
+```
