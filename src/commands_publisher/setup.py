@@ -21,7 +21,6 @@ setup(
     entry_points={
         'console_scripts': [
             'commands_publisher_node = commands_publisher.commands_publisher_node:main',
-            'commands_publisher_viz_node = commands_publisher.commands_publisher_viz_node:main'
         ],
     },
 )
