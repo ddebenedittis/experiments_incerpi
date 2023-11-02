@@ -49,11 +49,12 @@ class TestNode(Node):
                 
         joints_command_msg = JointsCommand()
        
-        joints_command_msg.name = ['JOINT_1', 'JOINT_2', 'JOINT_3']
+        # Joint names in the pi3hat controller interfece. 
+        joints_command_msg.name = ['joint1', 'joint2', 'joint3']
         joints_command_msg.position = self.joint_pos[i, :].tolist()
         joints_command_msg.velocity = self.joint_vel[i, :].tolist()
         joints_command_msg.effort = self.torques[i, :].tolist()
-        joints_command_msg.kp_scale = [3, 3, 3]
+        joints_command_msg.kp_scale = [3., 3., 3.]
         joints_command_msg.kd_scale =  [0.05, 0.05, 0.05]
 
         self.pub.publish(joints_command_msg)
