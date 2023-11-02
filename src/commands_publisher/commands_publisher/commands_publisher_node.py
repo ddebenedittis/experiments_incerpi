@@ -2,20 +2,19 @@ import numpy as np
 import pandas as pd
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Header, Float64MultiArray
+from std_msgs.msg import Header
 from sensor_msgs.msg import JointState
+from pi3hat_moteus_int_msgs.msg import JointsCommand
 
-class HumbleNode(Node):
+class TestNode(Node):
     def __init__(self, csv_file_path):
-        super().__init__('humble_node')
+        super().__init__('test_node')
         
         self.declare_parameter('publish_joint_states', False)
         self.publish_joint_states = self.get_parameter('publish_joint_states').value
 
-        self.pub_torques = self.create_publisher(Float64MultiArray, 'TopicName1', 1)
-        self.pub_joint_pos = self.create_publisher(Float64MultiArray, 'TopicName2', 1)
-        self.pub_joint_vel = self.create_publisher(Float64MultiArray, 'TopicName3', 1)
-        
+        self.pub = self.create_publisher(JointsCommand, 'joint_controller/command', 1)
+       
         self.pub_rviz_joint_pos = self.create_publisher(JointState, '/joint_states', 1)
 
         self.csv_file_path = csv_file_path  # Initialize csv_file_path
@@ -40,7 +39,7 @@ class HumbleNode(Node):
             self.joint_pos[i, :] = self.tab.values[i, 0:3]
             self.joint_vel[i, :] = self.tab.values[i, 3:6]
             self.torques[i, :] = self.tab.values[i, 6:9]
-
+ 
     def publish_vectors(self):
         i = self.counter
         self.counter += 1
@@ -48,18 +47,17 @@ class HumbleNode(Node):
         if self.counter >= np.shape(self.torques)[0]:
             raise SystemExit
                 
-        torques_msg = Float64MultiArray()
-        joint_pos_msg = Float64MultiArray()
-        joint_vel_msg = Float64MultiArray()
+        joints_command_msg = JointsCommand()
+       
+        joints_command_msg.name = ['JOINT_1', 'JOINT_2', 'JOINT_3']
+        joints_command_msg.position = self.joint_pos[i, :].tolist()
+        joints_command_msg.velocity = self.joint_vel[i, :].tolist()
+        joints_command_msg.effort = self.torques[i, :].tolist()
+        joints_command_msg.kp_scale = [3, 3, 3]
+        joints_command_msg.kd_scale =  [0.05, 0.05, 0.05]
 
-        torques_msg.data = self.torques[i, :].tolist()
-        joint_pos_msg.data = self.joint_pos[i, :].tolist()
-        joint_vel_msg.data = self.joint_vel[i, :].tolist()
-
-        self.pub_torques.publish(torques_msg)
-        self.pub_joint_pos.publish(joint_pos_msg)
-        self.pub_joint_vel.publish(joint_vel_msg)
-        
+        self.pub.publish(joints_command_msg)
+       
         if self.publish_joint_states:
             rviz_joint_msg = JointState()
             rviz_joint_msg.header = Header()
@@ -71,7 +69,7 @@ class HumbleNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = HumbleNode('m.csv')  # '/path/to/your/csv/file.csv'
+    node = TestNode('m.csv')  # '/path/to/your/csv/file.csv'
     
     rclpy.logging.get_logger("Publishing node").info('Trajectory started.')
     
