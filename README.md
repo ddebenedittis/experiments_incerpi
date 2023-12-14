@@ -36,8 +36,11 @@ Run the publishing node with
 ros2 run commands_publisher commands_publisher_node
 ```
 
-To visualize the results in RViz do
+To visualize the results in RViz, do, in two different terminals (always source both ROS and the workspace), the following
 ```shell
 ros2 launch arm_description move_arm.launch.py
+```
+and
+```shell
 ros2 run commands_publisher commands_publisher_node --ros-args -p publish_joint_states:=True
 ```
