@@ -4,11 +4,26 @@
 
 Read everything. Stupid.
 
+## Preliminaries
+
+Install chrony:
+```shell
+sudo apt install chrony
+```
+
+Edit the config file and allow the pi3hat address. I.e., add `allow 100.100.100.3/24` at the end of the file. You can do it in the terminal with
+```shell
+sudo nano /etc/chrony/chrony.conf
+```
+Then, close the file with CTRL+X, and save (Y+ENTER).
+
 ## Usage
 
-Turn on the Pi3Hat (press the damn button).
+Turn on the battery (quick press followed by a long press). Turn on the Pi3Hat (press the damn button).
 
 The interface can be used with the WiFi or with a LAN connection. The only difference is the IP address used when connecting with SSH. I used only the SSH cause Jacopino Pane e Vino Tiffany Ciony (hereafter only Tiffany) was angry and did not want to set up the WiFi. Deal with it.
+
+Connect to the LAN. Go to wired settings, open the settings, go to the `IPv4` tab, choose the `manual` method. Then, use 100.100.100.4 as the `Address` and 255.255.255.0 as the `Netmask`. Leave the gateway empty. Click `apply`, and then check that you are connected to the LAN.
 
 Verify that in the LAN settings (top right) the IPv4 address is 100.100.100.4.
 
